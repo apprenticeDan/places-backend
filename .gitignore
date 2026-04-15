@@ -1,0 +1,125 @@
+############################################
+# .NET / ASP.NET Core
+############################################
+
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Visual Studio
+.vs/
+*.vscode/
+.vscode/*
+
+# Rider
+.idea/
+
+# Logs
+*.log
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Publish output
+publish/
+*.publishproj
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+project.lock.json
+project.assets.json
+
+# .NET Core
+*.runtimeconfig.dev.json
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# IIS Express
+.iis/
+*.dbmdl
+
+# Secrets
+secrets.json
+appsettings.Development.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+############################################
+# Test results
+############################################
+
+TestResults/
+*.trx
+*.coverage
+
+############################################
+# Docker
+############################################
+
+docker-compose.override.yml
+
+############################################
+# Flutter / Dart
+############################################
+
+# Flutter build
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+.dart_tool/
+
+# Generated files
+generated_plugin_registrant.dart
+
+# IDE
+*.iml
+
+# Android
+/android/.gradle/
+/android/app/build/
+/android/local.properties
+
+# iOS
+/ios/Pods/
+/ios/.symlinks/
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Flutter.podspec
+
+# MacOS
+/macos/Pods/
+
+# Web
+/web/build/
+
+############################################
+# Misc
+############################################
+
+# Environment variables
+.env
+.env.*
+
+# Coverage
+coverage/
+
+# Backup files
+*.bak
+*.tmp
+*.swp
