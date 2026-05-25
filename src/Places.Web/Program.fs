@@ -63,8 +63,6 @@ let main argv =
         )
     ) |> ignore
 
-    //builder.Services.AddEndpointsApiExplorer() |> ignore
-    //builder.Services.AddSwaggerGen()           |> ignore
     builder.Services.AddOpenApi() |> ignore
 
     let app = builder.Build()
@@ -75,32 +73,26 @@ let main argv =
 
     app.UseAuthentication() |> ignore
     app.UseAuthorization()  |> ignore
-    //app.UseSwagger()   |> ignore
-    //app.UseSwaggerUI() |> ignore
-    
 
     // ─── Endpoints ────────────────────────────────────────────────────────────────
-    app.MapPost("/auth/login", RequestDelegate(fun ctx ->
-        AuthEndpoints.loginHandler ejecutarLogin ctx))
+    // Al usar System.Func el framework puede leer los tipos automáticamente (OpenAPI)
+    
+    app.MapPost("/auth/login", Func<Places.Web.AuthEndpoints.LoginRequest, System.Threading.Tasks.Task<IResult>>(AuthEndpoints.loginHandler ejecutarLogin))
         .WithName("Login")
         .WithTags("Auth")
-        .Accepts<Places.Web.AuthEndpoints.LoginRequest>("application/json")
         .Produces(200)
         .Produces(401)
         .Produces(400)
         |> ignore
 
-    app.MapPost("/auth/registro", RequestDelegate(fun ctx ->
-        AuthEndpoints.registroHandler ejecutarRegistro ctx))
+    app.MapPost("/auth/registro", Func<Places.Web.AuthEndpoints.RegisterRequest, System.Threading.Tasks.Task<IResult>>(AuthEndpoints.registroHandler ejecutarRegistro))
         .WithName("Registro")
         .WithTags("Auth")
-        .Accepts<Places.Web.AuthEndpoints.RegisterRequest>("application/json")
         .Produces(201)
         .Produces(400)
         .Produces(409)
         |> ignore
 
-    //if app.Environment.IsDevelopment() then 
     app.MapGet("/dev/hash", RequestDelegate(fun ctx ->
         task {
             let pwd  = ctx.Request.Query["pwd"].ToString()
@@ -109,5 +101,4 @@ let main argv =
         } :> System.Threading.Tasks.Task
     )) |> ignore
     app.Run()
-    0// Exit code
-
+    0

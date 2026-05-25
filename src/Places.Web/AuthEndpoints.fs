@@ -30,15 +30,13 @@ type RegisterRequest = {
 }
 
 // ─── Handler Login ────────────────────────────────────────────────────────────
-// Recibe las funciones ya construidas desde Program.fs — sin acceso directo a config
+// Usamos parámetros tipados en vez de HttpContext para habilitar OpenAPI
 
 let loginHandler
     (ejecutarLogin: LoginCommand -> Async<LoginResponse>)
-    (ctx: HttpContext)
-    : System.Threading.Tasks.Task =
+    (req: LoginRequest)
+    : System.Threading.Tasks.Task<IResult> =
     task {
-        let! req = ctx.Request.ReadFromJsonAsync<LoginRequest>()
-
         let cmd = {
             EmailRaw   = req.email
             Contraseña = req.contrasena
@@ -48,34 +46,26 @@ let loginHandler
 
         match respuesta with
         | LoginOk r ->
-            ctx.Response.StatusCode <- 200
-            do! ctx.Response.WriteAsJsonAsync(
-                {| token = r.Token; usuario = r.Usuario; roles = r.Roles |})
+            return Results.Ok({| token = r.Token; usuario = r.Usuario; roles = r.Roles |})
         | Unauthorized msg ->
-            ctx.Response.StatusCode <- 401
-            do! ctx.Response.WriteAsJsonAsync({| error = msg |})
+            return Results.Json({| error = msg |}, statusCode = 401)
         | BadRequest msg ->
-            ctx.Response.StatusCode <- 400
-            do! ctx.Response.WriteAsJsonAsync({| error = msg |})
+            return Results.BadRequest({| error = msg |})
         | ServerError msg ->
-            ctx.Response.StatusCode <- 500
-            do! ctx.Response.WriteAsJsonAsync({| error = msg |})
+            return Results.Json({| error = msg |}, statusCode = 500)
     }
 
 // ─── Handler Registro ─────────────────────────────────────────────────────────
 
 let registroHandler
     (ejecutarRegistro: RegisterCommand -> Async<RegistroResponse>)
-    (ctx: HttpContext)
-    : System.Threading.Tasks.Task =
+    (req: RegisterRequest)
+    : System.Threading.Tasks.Task<IResult> =
     task {
-        let! req = ctx.Request.ReadFromJsonAsync<RegisterRequest>()
-
-        // Parsear la fecha de nacimiento desde string
         let fechaNac =
             match System.DateTime.TryParse(req.fecha_nacimiento) with
             | true, d  -> d
-            | false, _ -> System.DateTime(2000, 1, 1) // valor por defecto seguro
+            | false, _ -> System.DateTime(2000, 1, 1)
 
         let cmd : RegisterCommand = {
             Nombres         = req.nombres
@@ -96,15 +86,11 @@ let registroHandler
 
         match respuesta with
         | RegistroOk msg ->
-            ctx.Response.StatusCode <- 201
-            do! ctx.Response.WriteAsJsonAsync({| mensaje = msg |})
+            return Results.Created("", {| mensaje = msg |})
         | RegistroBad msg ->
-            ctx.Response.StatusCode <- 400
-            do! ctx.Response.WriteAsJsonAsync({| error = msg |})
+            return Results.BadRequest({| error = msg |})
         | RegistroConflict msg ->
-            ctx.Response.StatusCode <- 409
-            do! ctx.Response.WriteAsJsonAsync({| error = msg |})
+            return Results.Conflict({| error = msg |})
         | RegistroError msg ->
-            ctx.Response.StatusCode <- 500
-            do! ctx.Response.WriteAsJsonAsync({| error = msg |})
+            return Results.Json({| error = msg |}, statusCode = 500)
     }
