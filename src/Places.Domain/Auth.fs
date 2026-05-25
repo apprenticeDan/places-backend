@@ -1,4 +1,6 @@
-﻿namespace Places.Domain
+namespace Places.Domain
+
+open System.Text.RegularExpressions
 
 // ─── Primitivos ──────────────────────────────────────────────────────────────
 // Cada valor del dominio tiene su propio tipo — el compilador impide mezclarlos
@@ -51,16 +53,25 @@ type AuthError =
     | SinPrivilegios       of NombreFunc
     | EmailInvalido        of string
     | ContraseñaDebil
+    | EmailYaExiste        // ← NUEVO: el correo ya fue registrado
+    | ErrorInterno         of string  // ← NUEVO: errores inesperados de BD/runtime
 
 // ─── Funciones puras de validación ───────────────────────────────────────────
 // Sin efectos secundarios. Sin dependencias externas. Solo lógica.
 
 module Validacion =
 
+    // Regex que valida: usuario@dominio.extension  (mínimo 2 chars en extensión)
+    let private emailRegex =
+        Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", RegexOptions.Compiled)
+
     let validarEmail (raw: string) : Result<Email, AuthError> =
-        if raw.Contains("@") && raw.Length > 5
-        then Ok (Email raw)
-        else Error (EmailInvalido raw)
+        if System.String.IsNullOrWhiteSpace(raw) then
+            Error (EmailInvalido "El correo no puede estar vacío")
+        elif not (emailRegex.IsMatch(raw.Trim())) then
+            Error (EmailInvalido raw)
+        else
+            Ok (Email (raw.Trim().ToLowerInvariant()))
 
     let tienePrivilegio (func: NombreFunc) (usuario: Usuario) : Result<Usuario, AuthError> =
         // busca si alguno de los roles del usuario tiene el privilegio requerido
@@ -75,3 +86,10 @@ module Validacion =
         if verificar candidata hash
         then Ok ()
         else Error CredencialesInvalidas
+
+    /// Valida que la contraseña tenga al menos 6 caracteres
+    let validarContraseñaRegistro (pwd: string) : Result<string, AuthError> =
+        if System.String.IsNullOrWhiteSpace(pwd) || pwd.Length < 6 then
+            Error ContraseñaDebil
+        else
+            Ok pwd

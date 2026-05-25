@@ -27,8 +27,16 @@ let main argv =
     let verificar = AuthTokens.verificarHash
     let emitir   = AuthTokens.emitirToken jwtKey jwtHours
 
-    // ─── Caso de uso ensamblado ───────────────────────────────────────────────────
+    // ─── Caso de uso ensamblado (Login) ───────────────────────────────────────────
     let ejecutarLogin = AuthUseCase.loginResponse buscar verificar emitir
+
+    // ─── Funciones concretas para Registro ────────────────────────────────────────
+    let existeEmail    = AuthRepository.emailExiste connStr
+    let hashPwd        = AuthTokens.hashPassword
+    let crearUsr       = AuthRepository.crearUsuario connStr
+
+    // ─── Caso de uso ensamblado (Registro) ────────────────────────────────────────
+    let ejecutarRegistro = AuthUseCase.registrarResponse existeEmail hashPwd crearUsr
 
     // ─── JWT middleware ───────────────────────────────────────────────────────────
     builder.Services
@@ -75,6 +83,21 @@ let main argv =
     app.MapPost("/auth/login", RequestDelegate(fun ctx ->
         AuthEndpoints.loginHandler ejecutarLogin ctx))
         .WithName("Login")
+        .WithTags("Auth")
+        .Accepts<Places.Web.AuthEndpoints.LoginRequest>("application/json")
+        .Produces(200)
+        .Produces(401)
+        .Produces(400)
+        |> ignore
+
+    app.MapPost("/auth/registro", RequestDelegate(fun ctx ->
+        AuthEndpoints.registroHandler ejecutarRegistro ctx))
+        .WithName("Registro")
+        .WithTags("Auth")
+        .Accepts<Places.Web.AuthEndpoints.RegisterRequest>("application/json")
+        .Produces(201)
+        .Produces(400)
+        .Produces(409)
         |> ignore
 
     //if app.Environment.IsDevelopment() then 
