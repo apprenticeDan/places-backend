@@ -354,8 +354,8 @@ VALUES (
     );
 
 -- 3. Insertar Usuarios
--- Contraseña de Dan es: "password123"
--- BCrypt Hash: $2a$11$wK6iYc8h9Yt.Qp94gQvD0umS25H3M9v/X2r.XjYk3H3tW0K3eWp2C
+-- Contraseña de Dan es: "pass123"
+-- BCrypt Hash: $2a$11$/c.5RSW2jTHfGnBe2RZ.XORuYqXE3g6x/RXIHPtKlcsT2jzeynFvm
 INSERT INTO
     Usuarios (
         id_persona,
@@ -365,11 +365,11 @@ INSERT INTO
 VALUES (
         1,
         'dan@places.com',
-        '$2a$11$IEgEd5e9Sjf5yJyHEa/tQe5XsHM43JwNQfFE2cb4FqKD9epYe0PAC'
+        '$2a$11$/c.5RSW2jTHfGnBe2RZ.XORuYqXE3g6x/RXIHPtKlcsT2jzeynFvm'
     );
 
--- Contraseña de Margarita es: "margarita123"
--- BCrypt Hash Real: $2a$11$ptwr/PhI3BNMaO1IFdd9Zed71BQENf8CDeiu9CGInMetLu.mnp3EO
+-- Contraseña de Margarita es: "marga123"
+-- BCrypt Hash Real: $2a$11$NdHV5wrdXUaSwoIoVpQJD.pEYYjOHRxHOX7j4BcWsC/FqkQfFtXzK
 INSERT INTO
     Usuarios (
         id_persona,
@@ -379,11 +379,11 @@ INSERT INTO
 VALUES (
         2,
         'margarita@places.com',
-        '$2a$11$ptwr/PhI3BNMaO1IFdd9Zed71BQENf8CDeiu9CGInMetLu.mnp3EO'
+        '$2a$11$NdHV5wrdXUaSwoIoVpQJD.pEYYjOHRxHOX7j4BcWsC/FqkQfFtXzK'
     );
 
--- Contraseña de Clara es: "clara123"
--- BCrypt Hash Real: $2a$11$BJVDNsskHso8dwdfNDJOjeA3mzk3qUqImDlyQ.j0zyaOw2YmQABqC
+-- Contraseña de Clara es: "cla123"
+-- BCrypt Hash Real: $2a$11$R8PoguEilySFuPYmfyj1yerKdtvifUlpqnI2C8IGN7lC36CJ2tGUG
 INSERT INTO
     Usuarios (
         id_persona,
@@ -393,11 +393,11 @@ INSERT INTO
 VALUES (
         3,
         'clara@places.com',
-        '$2a$11$BJVDNsskHso8dwdfNDJOjeA3mzk3qUqImDlyQ.j0zyaOw2YmQABqC'
+        '$2a$11$R8PoguEilySFuPYmfyj1yerKdtvifUlpqnI2C8IGN7lC36CJ2tGUG'
     );
 
--- Contraseña de Pancho es: "pancho123"
--- BCrypt Hash Real: $2a$11$IqWXGF8toKznaGE/EhpwyuKgbwAubReBMgDkaNumy.SbW7XnCBPPe
+-- Contraseña de Pancho es: "pan123"
+-- BCrypt Hash Real: $2a$11$FraQDg05/jWbZL3.PXsTre1yEVuBBi576rMGNp8M4djauJB89VLx.
 INSERT INTO
     Usuarios (
         id_persona,
@@ -407,11 +407,11 @@ INSERT INTO
 VALUES (
         4,
         'pancho@places.com',
-        '$2a$11$IqWXGF8toKznaGE/EhpwyuKgbwAubReBMgDkaNumy.SbW7XnCBPPe'
+        '$2a$11$FraQDg05/jWbZL3.PXsTre1yEVuBBi576rMGNp8M4djauJB89VLx.'
     );
 
--- Contraseña de Albertina es: "albertina123"
--- BCrypt Hash Real: $2a$11$LoxCxr8b2Sef.7qg/yWsxu56JPbm9Vq6.QmhHBxoo.Abbj9wiSw7W
+-- Contraseña de Albertina es: "alb123"
+-- BCrypt Hash Real: $2a$11$8LmPJOgv9FbNUM9/2fDBl.d8NeO6ceh6RdTNFBA/cfY10V9VL/5am
 INSERT INTO
     Usuarios (
         id_persona,
@@ -421,11 +421,11 @@ INSERT INTO
 VALUES (
         5,
         'albertina@places.com',
-        '$2a$11$LoxCxr8b2Sef.7qg/yWsxu56JPbm9Vq6.QmhHBxoo.Abbj9wiSw7W'
+        '$2a$11$8LmPJOgv9FbNUM9/2fDBl.d8NeO6ceh6RdTNFBA/cfY10V9VL/5am'
     );
 
--- Contraseña de Linda es: "linda123"
--- BCrypt Hash Real: $2a$11$HhUmzDAtltss2IZQmI2VBO5Fhn2RCYfFFv0VhcdVIhGsZNvzpYd8m
+-- Contraseña de Linda es: "lin123"
+-- BCrypt Hash Real: $2a$11$Mgr1h0dL9.MC2sX30xKkEen4SLmEZSMHN6HhcI/9nZNUJlCdL6q8O
 INSERT INTO
     Usuarios (
         id_persona,
@@ -435,7 +435,7 @@ INSERT INTO
 VALUES (
         6,
         'linda@places.com',
-        '$2a$11$HhUmzDAtltss2IZQmI2VBO5Fhn2RCYfFFv0VhcdVIhGsZNvzpYd8m'
+        '$2a$11$Mgr1h0dL9.MC2sX30xKkEen4SLmEZSMHN6HhcI/9nZNUJlCdL6q8O'
     );
 
 -- 4. Asignar Cuentas (Roles)

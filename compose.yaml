@@ -37,8 +37,8 @@ services:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
     stdin_open: true
     tty: true
-    # Por ahora sólo mantendremos el contenedor corriendo para poder ejecutar comandos de dotnet
-    command: sleep infinity
+    # Ejecutar la aplicación en modo watch para recarga automática
+    command: dotnet watch run --project src/Places.Web/Places.Web.fsproj --urls http://0.0.0.0:8080
 
 volumes:
   places-pgdata:

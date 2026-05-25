@@ -39,3 +39,6 @@ let emitirToken (secretKey: string) (expiresHours: int) : Places.Application.Emi
             )
 
         JwtSecurityTokenHandler().WriteToken(token)
+
+let hashPassword (candidata: string) : string =
+    BCrypt.Net.BCrypt.HashPassword(candidata)

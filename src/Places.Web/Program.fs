@@ -46,6 +46,15 @@ let main argv =
             )) |> ignore
     builder.Services.AddAuthorization() |> ignore
 
+    // ─── CORS configuration ───────────────────────────────────────────────────────
+    builder.Services.AddCors(fun options ->
+        options.AddPolicy("AllowAll", fun policy ->
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader() |> ignore
+        )
+    ) |> ignore
+
     //builder.Services.AddEndpointsApiExplorer() |> ignore
     //builder.Services.AddSwaggerGen()           |> ignore
     builder.Services.AddOpenApi() |> ignore
@@ -53,6 +62,8 @@ let main argv =
     let app = builder.Build()
     app.MapOpenApi()  |> ignore
     app.MapScalarApiReference() |> ignore
+
+    app.UseCors("AllowAll") |> ignore
 
     app.UseAuthentication() |> ignore
     app.UseAuthorization()  |> ignore
@@ -66,6 +77,14 @@ let main argv =
         .WithName("Login")
         |> ignore
 
+    //if app.Environment.IsDevelopment() then 
+    app.MapGet("/dev/hash", RequestDelegate(fun ctx ->
+        task {
+            let pwd  = ctx.Request.Query["pwd"].ToString()
+            let hash = AuthTokens.hashPassword pwd
+            do! ctx.Response.WriteAsJsonAsync({| hash = hash |})
+        } :> System.Threading.Tasks.Task
+    )) |> ignore
     app.Run()
     0// Exit code
 
