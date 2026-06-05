@@ -100,5 +100,36 @@ let main argv =
             do! ctx.Response.WriteAsJsonAsync({| hash = hash |})
         } :> System.Threading.Tasks.Task
     )) |> ignore
+    
+    // ─── Static Files (Imágenes) ───────────────────────────────────────────────────
+    app.UseStaticFiles(StaticFileOptions(
+        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+            System.IO.Path.Combine(builder.Environment.ContentRootPath, "wwwroot", "images")
+        ),
+        RequestPath = "/api/images"
+    )) |> ignore
+
+    // ─── Endpoints Lugares y Reseñas ──────────────────────────────────────────────
+    let obtenerLugares = LugaresRepository.obtenerLugares connStr
+    let obtenerResenas = LugaresRepository.obtenerResenasPorLugar connStr
+
+    app.MapGet("/api/places", Func<System.Threading.Tasks.Task<IResult>>(fun () ->
+        task {
+            let! lugares = obtenerLugares () |> Async.StartAsTask
+            return Results.Ok(lugares)
+        }))
+        .WithName("GetPlaces")
+        .WithTags("Places")
+        |> ignore
+
+    app.MapGet("/api/places/{placeId}/reviews", Func<int, System.Threading.Tasks.Task<IResult>>(fun placeId ->
+        task {
+            let! resenas = obtenerResenas placeId |> Async.StartAsTask
+            return Results.Ok(resenas)
+        }))
+        .WithName("GetReviews")
+        .WithTags("Places")
+        |> ignore
+
     app.Run()
     0
