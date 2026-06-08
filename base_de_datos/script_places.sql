@@ -449,7 +449,7 @@ VALUES (1, 1), -- Dan -> Admin
     (6, 2);
 -- Linda -> Usuario
 
--- 5. Insertar el lugar principal de pruebas ("Uyuni")
+-- 5. Insertar los lugares de prueba
 INSERT INTO
     lugares (
         id_lugar,
@@ -474,6 +474,54 @@ VALUES (
         'Antonio Quijarro',
         'Potosí',
         'https://es.wikipedia.org/wiki/Salar_de_Uyuni'
+    ),
+    (
+        2,
+        'Lago Titicaca',
+        'El lago navegable más alto del mundo, cuna de la civilización inca.',
+        -16.275,
+        -69.091,
+        'Frontera con Perú',
+        'Copacabana',
+        'Manco Kapac',
+        'La Paz',
+        'https://es.wikipedia.org/wiki/Lago_Titicaca'
+    ),
+    (
+        3,
+        'Tiwanaku',
+        'Antigua ciudad arqueológica, uno de los centros preincaicos más importantes.',
+        -16.555,
+        -68.673,
+        'Cerca del Lago Titicaca',
+        'Tiahuanaco',
+        'Ingavi',
+        'La Paz',
+        'https://es.wikipedia.org/wiki/Tiahuanaco'
+    ),
+    (
+        4,
+        'Parque Nacional Madidi',
+        'Una de las reservas más ricas en biodiversidad del planeta.',
+        -14.283,
+        -68.866,
+        'Amazonía Boliviana',
+        'San Buenaventura',
+        'Abel Iturralde',
+        'La Paz',
+        'https://es.wikipedia.org/wiki/Parque_nacional_Madidi'
+    ),
+    (
+        5,
+        'Samaipata',
+        'Fuerte preincaico en lo alto de una montaña con vistas espectaculares.',
+        -18.175,
+        -63.823,
+        'Valles cruceños',
+        'Samaipata',
+        'Florida',
+        'Santa Cruz',
+        'https://es.wikipedia.org/wiki/Samaipata'
     );
 
 -- 6. Insertar Comentarios del Frontend (conectados a las personas correspondientes)
@@ -570,4 +618,49 @@ VALUES (
         'assets/images/persona5.jpg',
         'Foto de Linda',
         5
+    );
+
+-- 8. Insertar fotos principales de los lugares (lugar1.jpg a lugar5.jpg)
+INSERT INTO
+    fotos (
+        id_foto,
+        lugar_id,
+        url,
+        descripcion,
+        comentario_id
+    )
+VALUES (
+        6,
+        1,
+        'assets/images/lugar1.jpg',
+        'Vista de Uyuni',
+        NULL
+    ),
+    (
+        7,
+        2,
+        'assets/images/lugar2.jpg',
+        'Vista del Lago Titicaca',
+        NULL
+    ),
+    (
+        8,
+        3,
+        'assets/images/lugar3.jpg',
+        'Ruinas de Tiwanaku',
+        NULL
+    ),
+    (
+        9,
+        4,
+        'assets/images/lugar4.jpg',
+        'Flora y fauna del Madidi',
+        NULL
+    ),
+    (
+        10,
+        5,
+        'assets/images/lugar5.jpg',
+        'Fuerte de Samaipata',
+        NULL
     );
