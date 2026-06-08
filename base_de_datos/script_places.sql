@@ -351,6 +351,20 @@ VALUES (
         6667788,
         7775544,
         'linda@places.com'
+    ),
+    (
+        7,
+        'Inge',
+        'Test',
+        'Apellidos',
+        1112223,
+        'LP',
+        '1990-01-01',
+        'Masculino',
+        'Direccion de Inge',
+        2223344,
+        7778899,
+        'inge@places.com'
     );
 
 -- 3. Insertar Usuarios
@@ -438,6 +452,19 @@ VALUES (
         '$2a$11$Mgr1h0dL9.MC2sX30xKkEen4SLmEZSMHN6HhcI/9nZNUJlCdL6q8O'
     );
 
+-- Contraseña de Inge es: "pass123"
+INSERT INTO
+    Usuarios (
+        id_persona,
+        usuario,
+        contrasena
+    )
+VALUES (
+        7,
+        'inge@places.com',
+        '$2a$11$/c.5RSW2jTHfGnBe2RZ.XORuYqXE3g6x/RXIHPtKlcsT2jzeynFvm'
+    );
+
 -- 4. Asignar Cuentas (Roles)
 INSERT INTO
     cuentas (id_persona, id_rol)
@@ -446,8 +473,9 @@ VALUES (1, 1), -- Dan -> Admin
     (3, 2), -- Clara -> Usuario
     (4, 2), -- Pancho -> Usuario
     (5, 2), -- Albertina -> Usuario
-    (6, 2);
--- Linda -> Usuario
+    (6, 2), -- Linda -> Usuario
+    (7, 2);
+-- Inge -> Usuario
 
 -- 5. Insertar los lugares de prueba
 INSERT INTO
