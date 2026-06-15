@@ -131,5 +131,84 @@ let main argv =
         .WithTags("Places")
         |> ignore
 
+    // ─── Crear Reseña (requiere JWT) ──────────────────────────────────────────
+    let obtenerPersonaId = LugaresRepository.obtenerPersonaIdPorEmail connStr
+    let crearComentario  = LugaresRepository.crearComentario connStr
+
+    app.MapPost("/api/places/{placeId}/reviews", Func<int, HttpContext, System.Threading.Tasks.Task<IResult>>(fun placeId ctx ->
+        task {
+            let email = ctx.User.FindFirst(System.Security.Claims.ClaimTypes.Name)
+            if email = null then
+                return Results.Unauthorized()
+            else
+                let! personaId = obtenerPersonaId email.Value |> Async.StartAsTask
+                if personaId = 0 then
+                    return Results.BadRequest({| error = "Usuario no encontrado" |})
+                else
+                    let! body = ctx.Request.ReadFromJsonAsync<Places.Domain.NuevoComentario>()
+                    if body.Estrellas < 1 || body.Estrellas > 5 then
+                        return Results.BadRequest({| error = "Estrellas debe ser entre 1 y 5" |})
+                    else
+                        do! crearComentario personaId placeId body.Texto body.Estrellas |> Async.StartAsTask
+                        return Results.Created("", {| mensaje = "Reseña creada" |})
+        }))
+        .RequireAuthorization()
+        .WithName("CreateReview")
+        .WithTags("Places")
+        |> ignore
+
+    // ─── Favoritos (requieren JWT) ────────────────────────────────────────────
+    let agregarFav  = LugaresRepository.agregarFavorito connStr
+    let quitarFav   = LugaresRepository.quitarFavorito connStr
+    let obtenerFavs = LugaresRepository.obtenerFavoritos connStr
+
+    app.MapPost("/api/places/{placeId}/favorite", Func<int, HttpContext, System.Threading.Tasks.Task<IResult>>(fun placeId ctx ->
+        task {
+            let email = ctx.User.FindFirst(System.Security.Claims.ClaimTypes.Name)
+            if email = null then return Results.Unauthorized()
+            else
+                let! personaId = obtenerPersonaId email.Value |> Async.StartAsTask
+                if personaId = 0 then return Results.BadRequest({| error = "Usuario no encontrado" |})
+                else
+                    do! agregarFav personaId placeId |> Async.StartAsTask
+                    return Results.Ok({| mensaje = "Favorito agregado" |})
+        }))
+        .RequireAuthorization()
+        .WithName("AddFavorite")
+        .WithTags("Favorites")
+        |> ignore
+
+    app.MapDelete("/api/places/{placeId}/favorite", Func<int, HttpContext, System.Threading.Tasks.Task<IResult>>(fun placeId ctx ->
+        task {
+            let email = ctx.User.FindFirst(System.Security.Claims.ClaimTypes.Name)
+            if email = null then return Results.Unauthorized()
+            else
+                let! personaId = obtenerPersonaId email.Value |> Async.StartAsTask
+                if personaId = 0 then return Results.BadRequest({| error = "Usuario no encontrado" |})
+                else
+                    do! quitarFav personaId placeId |> Async.StartAsTask
+                    return Results.Ok({| mensaje = "Favorito eliminado" |})
+        }))
+        .RequireAuthorization()
+        .WithName("RemoveFavorite")
+        .WithTags("Favorites")
+        |> ignore
+
+    app.MapGet("/api/favorites", Func<HttpContext, System.Threading.Tasks.Task<IResult>>(fun ctx ->
+        task {
+            let email = ctx.User.FindFirst(System.Security.Claims.ClaimTypes.Name)
+            if email = null then return Results.Unauthorized()
+            else
+                let! personaId = obtenerPersonaId email.Value |> Async.StartAsTask
+                if personaId = 0 then return Results.BadRequest({| error = "Usuario no encontrado" |})
+                else
+                    let! favs = obtenerFavs personaId |> Async.StartAsTask
+                    return Results.Ok(favs)
+        }))
+        .RequireAuthorization()
+        .WithName("GetFavorites")
+        .WithTags("Favorites")
+        |> ignore
+
     app.Run()
     0

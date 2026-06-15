@@ -25,3 +25,8 @@ type Comentario = {
     CommentText     : string
     ProfileImageUrl : string
 }
+
+type NuevoComentario = {
+    Texto     : string
+    Estrellas : int
+}
