@@ -28,6 +28,7 @@ services:
       ASPNETCORE_URLS: "http://0.0.0.0:8080"
       JWT__KEY: "cambiar-por-clave-segura"
       JWT__ExpiresHours: "24"
+      BaseImageUrl: "https://places-back.in4ind.fyi/api/images"
 
 volumes:
   places-pgdata:

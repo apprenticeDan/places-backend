@@ -110,8 +110,13 @@ let main argv =
     )) |> ignore
 
     // ─── Endpoints Lugares y Reseñas ──────────────────────────────────────────────
-    let obtenerLugares = LugaresRepository.obtenerLugares connStr
-    let obtenerResenas = LugaresRepository.obtenerResenasPorLugar connStr
+    let baseImageUrl = 
+        match config.["BaseImageUrl"] with
+        | null | "" -> "http://localhost:8080/api/images"
+        | url -> url
+
+    let obtenerLugares = LugaresRepository.obtenerLugares connStr baseImageUrl
+    let obtenerResenas = LugaresRepository.obtenerResenasPorLugar connStr baseImageUrl
 
     app.MapGet("/api/places", Func<System.Threading.Tasks.Task<IResult>>(fun () ->
         task {

@@ -18,7 +18,7 @@ type LugarRow = {
     rating      : int
 }
 
-let obtenerLugares (connStr: string) () =
+let obtenerLugares (connStr: string) (basePath: string) () =
     async {
         use conn = conexion connStr
         let sql = """
@@ -29,8 +29,6 @@ let obtenerLugares (connStr: string) () =
             conn.QueryAsync<LugarRow>(sql) 
             |> Async.AwaitTask
             
-        let basePath = "http://localhost:8080/api/images"
-        
         return 
             rows 
             |> Seq.map (fun r -> 
@@ -59,7 +57,7 @@ type ComentarioRow = {
     foto_url        : string
 }
 
-let obtenerResenasPorLugar (connStr: string) (placeId: int) =
+let obtenerResenasPorLugar (connStr: string) (basePath: string) (placeId: int) =
     async {
         use conn = conexion connStr
         let sql = """
@@ -77,8 +75,6 @@ let obtenerResenasPorLugar (connStr: string) (placeId: int) =
             conn.QueryAsync<ComentarioRow>(sql, {| placeId = placeId |}) 
             |> Async.AwaitTask
             
-        let basePath = "http://localhost:8080/api/images"
-        
         return 
             rows 
             |> Seq.map (fun r -> 

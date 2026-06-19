@@ -35,6 +35,7 @@ services:
       DOTNET_CLI_TELEMETRY_OPTOUT: "1"
       DOTNET_NOLOGO: "1"
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
+      BaseImageUrl: "http://localhost:8080/api/images"
     stdin_open: true
     tty: true
     # Ejecutar la aplicación en modo watch para recarga automática
