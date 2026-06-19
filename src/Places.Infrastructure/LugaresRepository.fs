@@ -8,6 +8,20 @@ open Places.Domain
 let private conexion (connStr: string) : IDbConnection =
     new NpgsqlConnection(connStr) :> IDbConnection
 
+// ─── Migraciones Automáticas (Auto-Setup) ────────────────────────────────────
+
+let asegurarEsquema (connStr: string) =
+    async {
+        use conn = conexion connStr
+        // Agregar columna 'estrellas' si no existe
+        let sql1 = "ALTER TABLE comentarios ADD COLUMN IF NOT EXISTS estrellas INTEGER DEFAULT 3 CHECK (estrellas BETWEEN 1 AND 5);"
+        // Actualizar la secuencia en caso de que haya habido inserciones manuales (seed)
+        let sql2 = "SELECT setval('comentarios_comentario_id_seq', COALESCE((SELECT MAX(comentario_id) FROM comentarios), 1));"
+        
+        do! conn.ExecuteAsync(sql1) |> Async.AwaitTask |> Async.Ignore
+        do! conn.ExecuteAsync(sql2) |> Async.AwaitTask |> Async.Ignore
+    }
+
 // ─── Lugares ─────────────────────────────────────────────────────────────────
 
 [<CLIMutable>]

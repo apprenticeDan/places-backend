@@ -214,6 +214,10 @@ let main argv =
         .WithName("GetFavorites")
         .WithTags("Favorites")
         |> ignore
+    // ─── Migración Automática al Iniciar ──────────────────────────────────────────
+    LugaresRepository.asegurarEsquema connStr 
+    |> Async.StartAsTask
+    |> fun t -> t.Wait()
 
     app.Run()
     0
